@@ -1,0 +1,9 @@
+.dCenter{
+    display: flex;
+    justify-content: center;
+}
+
+.editForm{
+    display: flex;
+    justify-content: space-between;
+}

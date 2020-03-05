@@ -14,4 +14,8 @@ class Ticket extends Model
         'id_user',
         'ticket_pedido'
     ];
+
+    public function usuario(){
+      return $this->belongsTo('App\User', 'id_user');
+    }
 }
