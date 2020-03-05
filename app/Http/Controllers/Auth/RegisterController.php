@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\tipoUsuario;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,6 +54,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'tipo_usuario' => 'required|integer|min:1|max:2',
         ]);
     }
 
@@ -64,9 +67,29 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'nombre' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'tipo_usuario' => $data['tipo_usuario'],
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        $tipoUsuarios = TipoUsuario::all();
+        return view('auth.register', compact('tipoUsuarios'));
+    }
+
+    protected function redirectTo(){
+        $return = '/';
+        if(Auth::check()){
+            $user = Auth::user();
+            if($user->tipo_usuario == 1){
+                $return = "/usuario";
+            }else if($user->tipo_usuario == 2){
+                $return = "/administrador";
+            }
+        }
+        return $return;
     }
 }
